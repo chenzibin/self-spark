@@ -42,14 +42,12 @@ object GroupByTest {
 
         val pairs1 = spark.sparkContext.parallelize(0 until numMappers, numMappers).flatMap { p =>
             val ranGen = new Random
-            val arr1 = new Array[(Int, Array[Byte])](numKVPairs)
+            val arr1 = new Array[(Int, Int)](numKVPairs)
             for (i <- 0 until numKVPairs) {
-                val byteArr = new Array[Byte](valSize)
-                ranGen.nextBytes(byteArr)
-                arr1(i) = (ranGen.nextInt(numKVPairs), byteArr)
+                arr1(i) = (ranGen.nextInt(numKVPairs), ranGen.nextInt(1000))
             }
             arr1
-        }
+        }.cache()
         // Enforce that everything has been calculated and in cache
         println(pairs1.count())
         println(pairs1.toDebugString)
@@ -57,6 +55,15 @@ object GroupByTest {
         val result = pairs1.groupByKey(numReducers)
         println(result.count())
         println(result.toDebugString)
+
+        val reduceAvgResult = pairs1.map(x => (x._1, (x._2, 1))).reduceByKey((x, y) => (x._1 + y._1, x._2 + y._2))
+        println(reduceAvgResult.collect())
+        println(reduceAvgResult.toDebugString)
+
+        val aggregateResult = pairs1.aggregateByKey("0")(_ + "_" + _ , _ + "@" + _)
+        aggregateResult.foreach(println)
+
+        val combineResult = pairs1.combineByKey(_, _, _, 2)
 
         Thread.sleep(1000 * 60 * 30)
         spark.stop()
