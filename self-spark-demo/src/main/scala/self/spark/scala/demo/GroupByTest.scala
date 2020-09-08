@@ -63,7 +63,14 @@ object GroupByTest {
         val aggregateResult = pairs1.aggregateByKey("0")(_ + "_" + _ , _ + "@" + _)
         aggregateResult.foreach(println)
 
-        val combineResult = pairs1.combineByKey(_, _, _, 2)
+        val combineResult = pairs1.combineByKey(
+            (c:Int) => c,
+            (_:Int) + (_:Int),
+            (c:Int, c2:Int) => c + c2,
+            2
+        )
+
+        val foldResult = pairs1.foldByKey(0)(_+_)
 
         Thread.sleep(1000 * 60 * 30)
         spark.stop()
