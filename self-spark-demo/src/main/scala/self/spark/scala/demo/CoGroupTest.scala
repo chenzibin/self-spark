@@ -44,8 +44,12 @@ object CoGroupTest {
             arr1
         }.cache()
 
-        val coGroupResult = pairs.cogroup(pairs1)
+        val coGroupResult = pairs.cogroup(pairs1, 2)
         coGroupResult.count()
+
+        val joinResult = pairs.join(pairs1, 2)
+
+        val cartesianResult = pairs.cartesian(pairs1)
 
         Thread.sleep(1000 * 60 * 30)
         spark.stop()
