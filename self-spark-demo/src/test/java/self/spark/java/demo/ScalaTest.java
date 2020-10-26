@@ -2,6 +2,11 @@ package self.spark.java.demo;
 
 import org.junit.Test;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * ScalaTest
  *
@@ -12,8 +17,8 @@ public class ScalaTest {
 
 	@Test
 	public void test() {
-		Demo demo = new Demo();
-		demo.demo();
+		System.out.println(Integer.MAX_VALUE);
+
 	}
 
 
