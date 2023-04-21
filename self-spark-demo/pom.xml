@@ -14,7 +14,7 @@
         <maven.comiler.source>1.8</maven.comiler.source>
         <maven.comiler.target>1.8</maven.comiler.target>
 
-        <spark.version>3.2.1</spark.version>
+        <spark.version>3.4.0</spark.version>
         <scala.version>2.12.15</scala.version>
     </properties>
 
